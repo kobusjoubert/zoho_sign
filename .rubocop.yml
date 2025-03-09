@@ -1,3 +1,8 @@
+plugins:
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rspec
+
 AllCops:
   TargetRubyVersion: 3.1
   NewCops: enable
@@ -5,8 +10,29 @@ AllCops:
     - active_service.gemspec
     - bin/*
 
+Metrics/BlockLength:
+  Exclude:
+    - spec/*/**.rb
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+  Exclude:
+    - lib/zoho_sign.rb
+
+Style/Documentation:
+  Enabled: false
+
 Style/StringLiterals:
   EnforcedStyle: single_quotes
 
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: single_quotes
+
+Style/SymbolArray:
+  Enabled: false
