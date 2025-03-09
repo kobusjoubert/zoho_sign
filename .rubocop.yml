@@ -7,8 +7,10 @@ AllCops:
   TargetRubyVersion: 3.1
   NewCops: enable
   Exclude:
-    - active_service.gemspec
+    - zoho_sign.gemspec
     - bin/*
+    - 'vendor/**/*'
+    - 'gem/**/*'
 
 Metrics/BlockLength:
   Exclude:
