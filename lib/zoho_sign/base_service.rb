@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class ZohoSign::BaseService < ActiveCall::Base
+  CACHE_KEY = { access_token: 'zoho_sign/base_service/access_token' }.freeze
+
   config_accessor :base_url, default: 'https://sign.zoho.com/api/v1', instance_writer: false
+  config_accessor :cache, default: ActiveSupport::Cache::MemoryStore.new, instance_writer: false
   config_accessor :logger, default: Logger.new($stdout), instance_writer: false
   config_accessor :log_level, default: :info, instance_writer: false
   config_accessor :log_headers, default: false, instance_writer: false
@@ -36,10 +39,11 @@ class ZohoSign::BaseService < ActiveCall::Base
   end
 
   def get_access_token
+    access_token = cache.read(CACHE_KEY[:access_token])
+    return access_token if access_token.present?
+
     service = ZohoSign::AccessToken::GetService.call
-    self.access_token = service.facade.access_token
-    access_token
-    # TODO: Persist access_token to cache...
+    cache.fetch(CACHE_KEY[:access_token], expires_in: [service.expires_in - 10, 0].max) { service.facade.access_token }
   end
 
   def too_many_requests?

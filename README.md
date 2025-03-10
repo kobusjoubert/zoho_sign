@@ -75,6 +75,7 @@ ZohoSign::BaseService.configure do |config|
   config.refresh_token = ''
 
   # Optional configuration.
+  config.cache = Rails.cache # Default: ActiveSupport::Cache::MemoryStore.new
   config.logger = Rails.logger # Default: Logger.new($stdout)
   config.logger_level = :debug # Default: :info
   config.log_headers = true # Default: false
