@@ -1,8 +1,6 @@
 # ZohoSign
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/zoho_sign`. To experiment with that code, run `bin/console` for an interactive prompt.
+Zoho Sign exposes the [Zoho Sign API](https://www.zoho.com/sign/api) endpoints through service objects.
 
 ## Installation
 
@@ -22,7 +20,138 @@ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
 
 ## Usage
 
-TODO: Write usage instructions here
+Each service object returned will undergo validation before the `call` method is invoked to access API endpoints.
+
+```ruby
+service.valid? # => true
+service.errors # => #<ActiveModel::Errors []>
+
+service.valid? # => false
+service.errors # => <ActiveModel::Errors [#<ActiveModel::Error attribute=name, type=blank, options={}>]>
+service.errors.full_messages # => ["Name can't be blank"]
+```
+
+After a **successful** `call` invocation, the `response` attribute will contain a `Faraday::Response` object.
+
+```ruby
+service.response # => #<Faraday::Response ...>
+service.response.status # => 200
+service.response.body # => {}
+```
+
+At this point you will also have a `facade` object which will hold all the attributes for the specific resource.
+
+```ruby
+service.facade # => #<ZohoSign::Document::Facade @request_status="inprogress" ...>
+service.facade.request_status # => 'inprogress'
+```
+
+For convenience, facade attributes can be accessed directly on the service object.
+
+```ruby
+service.request_status # => 'inprogress'
+```
+
+After a **failed** `call` invocation, a `ZohoSign::RequestError` will be raised with a `response` attribute which will contain a `Faraday::Response` object.
+
+```ruby
+rescue ZohoSign::RequestError => exception
+  exception.message # => ''
+  exception.response # => #<Faraday::Response ...>
+  exception.response.status # => 400
+  exception.response.body # => {}
+```
+
+### Configuration
+
+Configure your API credentials.
+
+In a Rails application, the standard practice is to place this code in a file named `zoho_sign.rb` within the `config/initializers` directory.
+
+```ruby
+ZohoSign::BaseService.configure do |config|
+  config.client_id = ''
+  config.client_secret = ''
+  config.refresh_token = ''
+
+  # Optional configuration.
+  config.logger = Rails.logger # Default: Logger.new($stdout)
+  config.logger_level = :debug # Default: :info
+  config.log_headers = true # Default: false
+  config.log_bodies = true # Default: false
+end
+```
+
+### Documents
+
+#### List documents.
+
+Note that the `offset` starts at `1` for the first item.
+
+```ruby
+ZohoSign::Document::ListService.call(limit: 10, offset: 1).each do |service|
+  service.description
+end
+```
+
+#### Get a document.
+
+```ruby
+service = ZohoSign::Document::GetService.call(id: '')
+service.request_name
+service.request_status
+service.owner_email
+service.owner_first_name
+service.owner_last_name
+service.attachments
+service.sign_percentage
+...
+```
+
+#### Create a document.
+
+```ruby
+service = ZohoSign::Document::CreateService.call(
+  request_name: 'Name',
+  is_sequential: false,
+  actions: [{
+    action_type: 'SIGN',
+    recipient_email: 'eric.cartman@example.com',
+    recipient_name: 'Eric Cartman',
+    verify_recipient: true,
+    verification_type: 'EMAIL'
+  }]
+)
+```
+
+#### Update a document.
+
+```ruby
+service = ZohoSign::Document::UpdateService.call(
+  id: '',
+  request_name: 'Name',
+  is_sequential: false,
+  actions: [{
+    action_type: 'SIGN',
+    recipient_email: 'stan.marsh@example.com',
+    recipient_name: 'Stan Marsh',
+    verify_recipient: true,
+    verification_type: 'EMAIL'
+  }]
+)
+```
+
+#### Delete a document.
+
+```ruby
+service = ZohoSign::Document::DeleteService.call(id: '')
+```
+
+### Folders
+### Field Types
+### Request Types
+### Templates
+
 
 ## Development
 

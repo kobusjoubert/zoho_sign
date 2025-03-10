@@ -5,8 +5,6 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in zoho_sign.gemspec
 gemspec
 
-gem 'active_service', github: 'kobusjoubert/active_service'
-
 gem 'debug'
 gem 'irb'
 gem 'rake', '~> 13.0'
