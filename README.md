@@ -89,11 +89,29 @@ end
 
 Note that the `offset` starts at `1` for the first item.
 
+If you don't provide a `limit`, multiple API requests will be made untill all records have been returned. You could be
+rate limited, so use wisely.
+
 ```ruby
-ZohoSign::Document::ListService.call(limit: 10, offset: 1).each do |service|
+ZohoSign::Document::ListService.call(offset: 1, limit: 10).each do |service|
   service.description
 end
 ```
+
+Sort by column.
+
+```ruby
+  ZohoSign::Document::ListService.call(sort_column: 'recipient_email', sort_order: 'ASC').map { _1 }
+```
+
+Filter by column.
+
+```ruby
+  ZohoSign::Document::ListService.call(search_columns: { recipient_email: 'eric.cartman@example.com' }).map { _1 }
+```
+
+Columns to sort and filter by are `request_name`, `folder_name`, `owner_full_name`, `recipient_email`,
+`form_name` `created_time`.
 
 #### Get a document.
 

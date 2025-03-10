@@ -8,10 +8,8 @@ require 'zeitwerk'
 
 require_relative 'zoho_sign/version'
 
-loader = Zeitwerk::Loader.for_gem.tap do |loader|
-  loader.push_dir("#{__dir__}/zoho_sign/concerns", namespace: ZohoSign)
-end
-
+loader = Zeitwerk::Loader.for_gem
+loader.push_dir("#{__dir__}/zoho_sign/concerns", namespace: ZohoSign)
 loader.setup
 
 module ZohoSign
@@ -26,12 +24,28 @@ module ZohoSign
 
   # 400..499
   class ClientError < RequestError; end
-  class BadRequestError < ClientError; end # 400
-  class UnauthorizedError < ClientError; end # 401
-  class ForbiddenError < ClientError; end # 403
-  class ResourceNotFound < ClientError; end # 404
-  class RequestTimeoutError < ClientError; end # 408
-  class ConflictError < ClientError; end # 409
-  class UnprocessableEntityError < ClientError; end # 422
-  class TooManyRequestsError < ClientError; end # 429
+
+  # 400
+  class BadRequestError < ClientError; end
+
+  # 401
+  class UnauthorizedError < ClientError; end
+
+  # 403
+  class ForbiddenError < ClientError; end
+
+  # 404
+  class ResourceNotFound < ClientError; end
+
+  # 408
+  class RequestTimeoutError < ClientError; end
+
+  # 409
+  class ConflictError < ClientError; end
+
+  # 422
+  class UnprocessableEntityError < ClientError; end
+
+  # 429
+  class TooManyRequestsError < ClientError; end
 end

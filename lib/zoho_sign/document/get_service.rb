@@ -36,13 +36,6 @@ class ZohoSign::Document::GetService < ZohoSign::BaseService
 
   private
 
-  def validate_response
-    raise ZohoSign::ServerError.new(response) if response.status >= 500
-    raise ZohoSign::UnauthorizedError.new(response) if unauthorized?
-    raise ZohoSign::TooManyRequestsError.new(response) if too_many_requests?
-    raise ZohoSign::ClientError.new(response) if response.status >= 400
-  end
-
   def set_facade
     @facade = ZohoSign::Document::Facade.new(response.body['requests'])
   end

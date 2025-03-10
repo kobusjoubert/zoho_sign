@@ -18,7 +18,7 @@ class ZohoSign::BaseService < ActiveCall::Base
   def connection
     @_connection ||= Faraday.new do |conn|
       conn.url_prefix = base_url
-      conn.request :authorization, 'Zoho-oauthtoken', -> { get_access_token }
+      conn.request :authorization, 'Zoho-oauthtoken', -> { access_token }
       conn.request :url_encoded
       conn.request :retry
       conn.response :json
@@ -38,7 +38,7 @@ class ZohoSign::BaseService < ActiveCall::Base
     }
   end
 
-  def get_access_token
+  def access_token
     access_token = cache.read(CACHE_KEY[:access_token])
     return access_token if access_token.present?
 
@@ -46,13 +46,27 @@ class ZohoSign::BaseService < ActiveCall::Base
     cache.fetch(CACHE_KEY[:access_token], expires_in: [service.expires_in - 10, 0].max) { service.facade.access_token }
   end
 
-  def too_many_requests?
-    return false unless response.status == 400 && response.body.key?('error_description')
+  def validate_response
+    raise ZohoSign::ServerError, response if response.status >= 500
 
-    response.body['error_description'].include?('too many requests')
+    raise ZohoSign::BadRequestError, response if bad_request?
+    raise ZohoSign::UnauthorizedError, response if unauthorized?
+    raise ZohoSign::TooManyRequestsError, response if too_many_requests?
+
+    raise ZohoSign::ClientError, response if response.status >= 400
+  end
+
+  def bad_request?
+    response.status == 400
   end
 
   def unauthorized?
     response.status == 401
+  end
+
+  def too_many_requests?
+    return false unless response.status == 400 && response.body.key?('error_description')
+
+    response.body['error_description'].include?('too many requests')
   end
 end

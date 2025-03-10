@@ -42,10 +42,8 @@ class ZohoSign::AccessToken::GetService < ZohoSign::BaseService
     }
   end
 
-  def validate_response
-    raise ZohoSign::ServerError.new(response) if response.status >= 500
-    raise ZohoSign::ClientError.new(response) if response.status >= 400
-    raise ZohoSign::UnauthorizedError.new(response) if response.status == 200 && response.body.key?('error')
+  def unauthorized?
+    response.status == 200 && response.body.key?('error')
   end
 
   def set_facade
