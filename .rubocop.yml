@@ -29,8 +29,19 @@ Metrics/BlockLength:
   Exclude:
     - spec/*/**.rb
 
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - lib/zoho_sign/document/list_service.rb
+
 Metrics/MethodLength:
   Enabled: false
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - lib/zoho_sign/document/list_service.rb
 
 Naming/MemoizedInstanceVariableName:
   EnforcedStyleForLeadingUnderscores: required

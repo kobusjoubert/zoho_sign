@@ -3,49 +3,20 @@
 require 'active_call'
 require 'faraday'
 require 'faraday/retry'
+require 'faraday/multipart'
 require 'faraday/logging/color_formatter'
 require 'zeitwerk'
 
-require_relative 'zoho_sign/version'
-
 loader = Zeitwerk::Loader.for_gem
-loader.push_dir("#{__dir__}/zoho_sign/concerns", namespace: ZohoSign)
+loader.ignore("#{__dir__}/zoho_sign/error.rb")
+loader.collapse("#{__dir__}/zoho_sign/concerns")
 loader.setup
 
-module ZohoSign
-  class Error < StandardError; end
+require_relative 'zoho_sign/error'
+require_relative 'zoho_sign/version'
 
-  class RequestError < Error
-    include RequestErrorable
-  end
+module ZohoSign; end
 
-  # 500..599
-  class ServerError < RequestError; end
-
-  # 400..499
-  class ClientError < RequestError; end
-
-  # 400
-  class BadRequestError < ClientError; end
-
-  # 401
-  class UnauthorizedError < ClientError; end
-
-  # 403
-  class ForbiddenError < ClientError; end
-
-  # 404
-  class ResourceNotFound < ClientError; end
-
-  # 408
-  class RequestTimeoutError < ClientError; end
-
-  # 409
-  class ConflictError < ClientError; end
-
-  # 422
-  class UnprocessableEntityError < ClientError; end
-
-  # 429
-  class TooManyRequestsError < ClientError; end
+ActiveSupport.on_load(:i18n) do
+  I18n.load_path << File.expand_path('zoho_sign/locale/en.yml', __dir__)
 end

@@ -1,0 +1,46 @@
+# frozen_string_literal: true
+
+module ZohoSign
+  class Error < StandardError; end
+
+  class ValidationError < Error
+    include ActiveCall::ValidationErrorable
+  end
+
+  class RequestError < Error
+    include ActiveCall::RequestErrorable
+  end
+
+  # 400..499
+  class ClientError < RequestError; end
+
+  # 400
+  class BadRequestError < ClientError; end
+
+  # 401
+  class UnauthorizedError < ClientError; end
+
+  # 403
+  class ForbiddenError < ClientError; end
+
+  # 404
+  class NotFoundError < ClientError; end
+
+  # 407
+  class ProxyAuthenticationRequiredError < ClientError; end
+
+  # 408
+  class RequestTimeoutError < ClientError; end
+
+  # 409
+  class ConflictError < ClientError; end
+
+  # 422
+  class UnprocessableEntityError < ClientError; end
+
+  # 429
+  class TooManyRequestsError < ClientError; end
+
+  # 500..599
+  class ServerError < RequestError; end
+end

@@ -1,25 +1,22 @@
 # frozen_string_literal: true
 
-class ZohoSign::Document::Facade
-  attr_reader :action_time, :actions, :attachment_size, :attachments, :created_time, :description, :document_fields,
-    :document_ids, :email_reminders, :expire_by, :expiration_days, :folder_id, :folder_name, :in_process, :is_deleted,
-    :is_expiring, :is_sequential, :modified_time, :notes, :owner_email, :owner_first_name, :owner_id, :owner_last_name,
-    :reminder_period, :request_id, :request_name, :request_status, :request_type_id, :request_type_name, :self_sign,
-    :sign_percentage, :sign_submitted_time, :template_ids, :templates_used, :validity, :visible_sign_settings,
-    :zsdocumentid
+class ZohoSign::Template::Document::Facade
+  attr_reader :action_time, :actions, :created_time, :description, :document_fields, :document_ids, :email_reminders,
+    :expiration_days, :expire_by, :folder_id, :folder_name, :in_process, :is_deleted, :is_expiring, :is_sequential,
+    :modified_time, :notes, :owner_email, :owner_first_name, :owner_id, :owner_last_name, :reminder_period, :request_id,
+    :request_name, :request_status, :request_type_id, :request_type_name, :self_sign, :sign_percentage,
+    :sign_submitted_time, :template_ids, :templates_used, :validity, :visible_sign_settings, :zsdocumentid
 
   def initialize(hash)
     @action_time           = hash['action_time']
     @actions               = hash['actions']
-    @attachment_size       = hash['attachment_size']
-    @attachments           = hash['attachments']
     @created_time          = hash['created_time']
     @description           = hash['description']
     @document_fields       = hash['document_fields']
     @document_ids          = hash['document_ids']
     @email_reminders       = hash['email_reminders']
-    @expire_by             = hash['expire_by']
     @expiration_days       = hash['expiration_days']
+    @expire_by             = hash['expire_by']
     @folder_id             = hash['folder_id']
     @folder_name           = hash['folder_name']
     @in_process            = hash['in_process']

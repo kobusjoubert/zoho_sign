@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class ZohoSign::Document::ListService < ZohoSign::BaseService
-  SORT_COLUMNS = %w[request_name folder_name owner_full_name recipient_email form_name created_time].freeze
+class ZohoSign::Template::ListService < ZohoSign::BaseService
+  SORT_COLUMNS = %w[template_name owner_first_name modified_time].freeze
   SORT_ORDERS  = %w[ASC DESC].freeze
 
   include Enumerable
@@ -24,7 +24,7 @@ class ZohoSign::Document::ListService < ZohoSign::BaseService
     throw :abort
   end
 
-  def initialize(limit: Float::INFINITY, offset: 1, sort_column: 'created_time', sort_order: 'DESC', search_columns: {})
+  def initialize(limit: Float::INFINITY, offset: 1, sort_column: 'template_name', sort_order: 'DESC', search_columns: {})
     @limit          = limit
     @offset         = offset
     @sort_column    = sort_column
@@ -36,14 +36,14 @@ class ZohoSign::Document::ListService < ZohoSign::BaseService
   #
   # ==== Examples
   #
-  #   service = ZohoSign::Document::ListService.call.first
+  #   service = ZohoSign::Template::ListService.call.first
   #   service.request_name
   #
-  #   ZohoSign::Document::ListService.call(offset: 11, limit: 10).each { _1 }
-  #   ZohoSign::Document::ListService.call(sort_column: 'recipient_email', sort_order: 'ASC').each { _1 }
-  #   ZohoSign::Document::ListService.call(search_columns: { recipient_email: 'eric.cartman@example.com' }).each { _1 }
+  #   ZohoSign::Template::ListService.call(offset: 11, limit: 10).each { _1 }
+  #   ZohoSign::Template::ListService.call(sort_column: 'template_name', sort_order: 'ASC').each { _1 }
+  #   ZohoSign::Template::ListService.call(search_columns: { template_name: 'Eric Template' }).each { _1 }
   #
-  # GET /api/v1/requests
+  # GET /api/v1/templates
   def call
     self
   end
@@ -56,7 +56,7 @@ class ZohoSign::Document::ListService < ZohoSign::BaseService
 
     catch :list_end do
       loop do
-        @response = connection.get('requests', data: params.to_json)
+        @response = connection.get('templates', data: params.to_json)
         validate(:response)
 
         unless success?
@@ -65,8 +65,8 @@ class ZohoSign::Document::ListService < ZohoSign::BaseService
           throw :list_end
         end
 
-        response.body['requests'].each do |hash|
-          yield ZohoSign::Document::Facade.new(hash)
+        response.body['templates'].each do |hash|
+          yield ZohoSign::Template::Facade.new(hash)
           total += 1
           throw :list_end if total >= limit
         end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ZohoSign::Document::GetService < ZohoSign::BaseService
+class ZohoSign::Template::GetService < ZohoSign::BaseService
   attr_reader :id
 
   after_call :set_facade
@@ -17,7 +17,7 @@ class ZohoSign::Document::GetService < ZohoSign::BaseService
   #
   # ==== Examples
   #
-  #   service = ZohoSign::Document::GetService.call(id: '')
+  #   service = ZohoSign::Template::GetService.call(id: '')
   #
   #   service.success? # => true
   #   service.errors # => #<ActiveModel::Errors []>
@@ -26,18 +26,18 @@ class ZohoSign::Document::GetService < ZohoSign::BaseService
   #   service.response.status # => 200
   #   service.response.body # => {}
   #
-  #   service.facade # => #<ZohoSign::Document::Facade ...>
-  #   service.facade.request_name
-  #   service.request_name
+  #   service.facade # => #<ZohoSign::Template::Facade ...>
+  #   service.facade.template_name
+  #   service.template_name
   #
-  # GET /api/v1/requests/:id
+  # GET /api/v1/templates/:id
   def call
-    connection.get("requests/#{id}")
+    connection.get("templates/#{id}")
   end
 
   private
 
   def set_facade
-    @facade = ZohoSign::Document::Facade.new(response.body['requests'])
+    @facade = ZohoSign::Template::Facade.new(response.body['templates'])
   end
 end

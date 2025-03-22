@@ -3,7 +3,7 @@
 require_relative 'lib/zoho_sign/version'
 
 Gem::Specification.new do |spec|
-  spec.name = 'zoho_sign'
+  spec.name = 'active_call-zoho_sign'
   spec.version = ZohoSign::VERSION
   spec.authors = ['Kobus Joubert']
   spec.email = ['kobus@translate3d.com']
@@ -34,8 +34,9 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'active_call', '~> 0.1'
+  spec.add_dependency 'active_call', '~> 0.2'
   spec.add_dependency 'faraday', '~> 2.0'
   spec.add_dependency 'faraday-retry', '~> 2.0'
+  spec.add_dependency 'faraday-multipart', '~> 1.1'
   spec.add_dependency 'faraday-logging-color_formatter', '~> 0.2'
 end

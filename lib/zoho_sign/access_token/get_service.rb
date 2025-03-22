@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ZohoSign::AccessToken::GetService < ZohoSign::BaseService
-  after_call :validate_response, :set_facade
+  after_call :set_facade
 
   delegate_missing_to :@facade
 
@@ -9,10 +9,11 @@ class ZohoSign::AccessToken::GetService < ZohoSign::BaseService
   #
   # ==== Examples
   #
-  #   service = ZohoSign::AccessTokenService.call
+  #   service = ZohoSign::AccessToken::GetService.call
   #   service.access_token # => '1000.xxxx.yyyy'
   #   service.expires_in # => 3600
   #
+  # POST /oauth/v2/token
   def call
     connection.post('oauth/v2/token', params.to_param)
   end
