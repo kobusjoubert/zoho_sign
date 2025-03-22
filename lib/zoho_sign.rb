@@ -8,6 +8,7 @@ require 'faraday/logging/color_formatter'
 require 'zeitwerk'
 
 loader = Zeitwerk::Loader.for_gem
+loader.ignore("#{__dir__}/active_call-zoho_sign.rb")
 loader.ignore("#{__dir__}/zoho_sign/error.rb")
 loader.collapse("#{__dir__}/zoho_sign/concerns")
 loader.setup

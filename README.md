@@ -9,13 +9,13 @@ TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_O
 Install the gem and add to the application's Gemfile by executing:
 
 ```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+bundle add active_call-zoho_sign
 ```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+gem install active_call-zoho_sign
 ```
 
 ## Configuration
@@ -25,6 +25,8 @@ Configure your API credentials.
 In a Rails application, the standard practice is to place this code in a file named `zoho_sign.rb` within the `config/initializers` directory.
 
 ```ruby
+require 'active_call-zoho_sign'
+
 ZohoSign::BaseService.configure do |config|
   config.client_id = ''
   config.client_secret = ''
