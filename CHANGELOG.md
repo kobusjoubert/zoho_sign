@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.1.3] - 2025-03-25
+
+- RubyGem badge
+- Bug fix on method `forbidden?`
+
 ## [0.1.2] - 2025-03-25
 
 - Refactored common REST API methods out into an active_call-api gem.
