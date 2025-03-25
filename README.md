@@ -1,5 +1,7 @@
 # Active Call - Zoho Sign
 
+[![Gem Version](https://badge.fury.io/rb/active_call-zoho_sign.svg?icon=si%3Arubygems)](https://badge.fury.io/rb/active_call-zoho_sign)
+
 Zoho Sign exposes the [Zoho Sign API](https://www.zoho.com/sign/api) endpoints through service objects.
 
 ## Installation

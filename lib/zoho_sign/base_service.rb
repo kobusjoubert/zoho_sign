@@ -78,7 +78,7 @@ class ZohoSign::BaseService < ActiveCall::Base
   end
 
   def forbidden?
-    response.status == 403
+    return true if response.status == 403
     return false unless response.status == 400 && response.body.key?('code')
 
     # 4003: Access to view the document is denied.
@@ -93,7 +93,7 @@ class ZohoSign::BaseService < ActiveCall::Base
 
     # 4066: Invalid Request ID.
     # 20405: Invalid Template ID.
-    return true if [4066, 20405].include?(response.body['code'])
+    return true if [4_066, 20_405].include?(response.body['code'])
 
     false
   end
