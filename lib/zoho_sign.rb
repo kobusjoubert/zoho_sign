@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 require 'active_call'
-require 'faraday'
-require 'faraday/retry'
+require 'active_call/api'
 require 'faraday/multipart'
-require 'faraday/logging/color_formatter'
-require 'zeitwerk'
 
 loader = Zeitwerk::Loader.for_gem
 loader.ignore("#{__dir__}/active_call-zoho_sign.rb")
@@ -17,7 +14,3 @@ require_relative 'zoho_sign/error'
 require_relative 'zoho_sign/version'
 
 module ZohoSign; end
-
-ActiveSupport.on_load(:i18n) do
-  I18n.load_path << File.expand_path('zoho_sign/locale/en.yml', __dir__)
-end

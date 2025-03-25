@@ -26,6 +26,9 @@ module ZohoSign
   # 404
   class NotFoundError < ClientError; end
 
+  # 406
+  class NotAcceptableError < ClientError; end
+
   # 407
   class ProxyAuthenticationRequiredError < ClientError; end
 
@@ -43,4 +46,19 @@ module ZohoSign
 
   # 500..599
   class ServerError < RequestError; end
+
+  # 500
+  class InternalServerError < ServerError; end
+
+  # 501
+  class NotImplementedError < ServerError; end
+
+  # 502
+  class BadGatewayError < ServerError; end
+
+  # 503
+  class ServiceUnavailableError < ServerError; end
+
+  # 504
+  class GatewayTimeoutError < ServerError; end
 end
