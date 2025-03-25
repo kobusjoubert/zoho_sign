@@ -1,5 +1,3 @@
-## [Unreleased]
-
 ## [0.1.3] - 2025-03-25
 
 - RubyGem badge
