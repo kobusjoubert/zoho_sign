@@ -1,3 +1,7 @@
+## [0.1.4] - 2025-03-31
+
+- Sign a document embedded link fix.
+
 ## [0.1.3] - 2025-03-25
 
 - RubyGem badge
