@@ -1,25 +1,28 @@
 # frozen_string_literal: true
 
 class ZohoSign::Document::Action::EmbedToken::GetService < ZohoSign::BaseService
-  attr_reader :id, :request_id, :host
+  attr_reader :request_id, :action_id, :host
+
+  validates :request_id, :action_id, :host, presence: true
 
   after_call :set_facade
 
   delegate_missing_to :@facade
 
-  validates :id, :request_id, :host, presence: true
-
-  def initialize(id:, request_id:, host:)
-    @id         = id
+  def initialize(request_id:, action_id:, host:)
     @request_id = request_id
+    @action_id  = action_id
     @host       = host
   end
 
-  # Get a document.
+  # Get a signing URL.
+  #
+  # A unique signing URL will be generated, which will be valid for two minutes. If the signing page is not open by
+  # then, a new link needs to be generated and it is a one-time usable URL.
   #
   # ==== Examples
   #
-  #   service = ZohoSign::Document::Action::EmbedToken::GetService.call(id: '', request_id: '', host: '')
+  #   service = ZohoSign::Document::Action::EmbedToken::GetService.call(request_id: '', action_id: '', host: '')
   #
   #   service.success? # => true
   #   service.errors # => #<ActiveModel::Errors []>
@@ -29,12 +32,12 @@ class ZohoSign::Document::Action::EmbedToken::GetService < ZohoSign::BaseService
   #   service.response.body # => {}
   #
   #   service.facade # => #<ZohoSign::Document::Action::EmbedToken::Facade ...>
-  #   service.facade.request_name
-  #   service.request_name
+  #   service.facade.sign_url
+  #   service.sign_url
   #
-  # POST /api/v1/requests/:request_id/actions/:id/embedtoken
+  # POST /api/v1/requests/:request_id/actions/:action_id/embedtoken
   def call
-    connection.post("/api/v1/requests/#{request_id}/actions/#{id}/embedtoken", **params)
+    connection.post("/api/v1/requests/#{request_id}/actions/#{action_id}/embedtoken", **params)
   end
 
   private
@@ -46,6 +49,6 @@ class ZohoSign::Document::Action::EmbedToken::GetService < ZohoSign::BaseService
   end
 
   def set_facade
-    @facade = ZohoSign::Document::Action::EmbedToken.new(response.body)
+    @facade = ZohoSign::Document::Action::EmbedToken::Facade.new(response.body)
   end
 end

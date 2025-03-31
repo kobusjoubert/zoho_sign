@@ -283,6 +283,15 @@ service = ZohoSign::Document::UpdateService.call(
 service = ZohoSign::Document::DeleteService.call(id: '')
 ```
 
+#### Sign a document.
+
+A unique signing URL will be generated, which will be valid for two minutes. If the signing page is not open by then, a new link needs to be generated and it is a one-time usable URL.
+
+```ruby
+service = ZohoSign::Document::Action::EmbedToken::GetService.call(request_id: '', action_id: '', host: '')
+service.sign_url
+```
+
 ### Folders
 
 TODO: ...
