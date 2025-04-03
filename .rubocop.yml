@@ -20,7 +20,8 @@ Layout/HashAlignment:
   EnforcedColonStyle: table
 
 Layout/LineLength:
-  AllowedPatterns: ['initialize']
+  AllowedPatterns:
+    - initialize
 
 Lint/MissingSuper:
   Enabled: false
@@ -37,8 +38,7 @@ Metrics/ClassLength:
 
 Metrics/CyclomaticComplexity:
   Exclude:
-    - lib/zoho_sign/document/list_service.rb
-    - lib/zoho_sign/template/list_service.rb
+    - lib/zoho_sign/concerns/enumerable.rb
 
 Metrics/MethodLength:
   Enabled: false

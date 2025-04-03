@@ -4,6 +4,20 @@
 
 Zoho Sign exposes the [Zoho Sign API](https://www.zoho.com/sign/api) endpoints through service objects.
 
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+  - [Using call](#using-call)
+  - [Using call!](#using-call!)
+  - [When to use call or call!](#using-call-or-call!)
+  - [Using lists](#using-lists)
+  - [Documents](#documents)
+  - [Folders](#folders)
+  - [Templates](#templates)
+- [Development](#development)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Installation
 
 Install the gem and add to the application's Gemfile by executing:
@@ -45,7 +59,7 @@ While testing, you can set your temporary development OAuth access token in the 
 
 ## Usage
 
-### Using `.call`
+### <a name='using-call'></a>Using `call`
 
 Each service object returned will undergo validation before the `call` method is invoked to access API endpoints.
 
@@ -99,7 +113,7 @@ service.response.status # => 400
 service.response.body # => {"code"=>9004, "message"=>"No match found", "status"=>"failure"}
 ```
 
-### Using `.call!`
+### <a name='using-call!'></a>Using `call!`
 
 Each service object returned will undergo validation before the `call!` method is invoked to access API endpoints.
 
@@ -154,14 +168,14 @@ rescue ZohoSign::RequestError => exception
   exception.response.body # => {"code"=>9004, "message"=>"No match found", "status"=>"failure"}
 ```
 
-### When to use `.call` or `.call!`
+### <a name='using-call-or-call!'></a>When to use `call` or `call!`
 
-An example of where to use `.call` would be in a **controller** doing an inline synchronous request.
+An example of where to use `call` would be in a **controller** doing an inline synchronous request.
 
 ```ruby
 class DocumentController < ApplicationController
   def update
-    @document = ZohoSign::Document::UpdateService.call(params)
+    @document = ZohoSign::Document::UpdateService.call(**params)
 
     if @document.success?
       redirect_to [@document], notice: 'Success', status: :see_other
@@ -173,7 +187,7 @@ class DocumentController < ApplicationController
 end
 ```
 
-An example of where to use `.call!` would be in a **job** doing an asynchronous request.
+An example of where to use `call!` would be in a **job** doing an asynchronous request.
 
 You can use the exceptions to determine which retry strategy to use and which to discard.
 
@@ -185,19 +199,20 @@ class DocumentJob < ApplicationJob
   retry_on ZohoSign::TooManyRequestsError, wait: :polynomially_longer, attempts: 10
 
   def perform
-    ZohoSign::Document::UpdateService.call!(params)
+    ZohoSign::Document::UpdateService.call!(**params)
   end
 end
 ```
 
+### Using lists
+
+If you don't provide the `limit` argument, multiple API requests will be made untill all records have been returned. You could be rate limited, so use wisely.
+
+Note that the `offset` argument starts at `1` for the first item.
+
 ### Documents
 
-#### List documents.
-
-Note that the `offset` starts at `1` for the first item.
-
-If you don't provide a `limit`, multiple API requests will be made untill all records have been returned. You could be
-rate limited, so use wisely.
+#### List documents
 
 ```ruby
 service = ZohoSign::Document::ListService.call(offset: 1, limit: 10).each do |facade|
@@ -217,10 +232,9 @@ Filter by column.
 ZohoSign::Document::ListService.call(search_columns: { recipient_email: 'eric.cartman@example.com' }).map { _1 }
 ```
 
-Columns to sort and filter by are `request_name`, `folder_name`, `owner_full_name`, `recipient_email`,
-`form_name` `created_time`.
+Columns to sort and filter by are `request_name`, `folder_name`, `owner_full_name`, `recipient_email`, `form_name` and `created_time`.
 
-#### Get a document.
+#### Get a document
 
 ```ruby
 service = ZohoSign::Document::GetService.call(id: '')
@@ -235,7 +249,7 @@ service.sign_percentage
 ...
 ```
 
-#### Create a document.
+#### Create a document
 
 ```ruby
 service = ZohoSign::Document::CreateService.call(
@@ -258,7 +272,7 @@ service = ZohoSign::Document::CreateService.call(
 )
 ```
 
-#### Update a document.
+#### Update a document
 
 ```ruby
 service = ZohoSign::Document::UpdateService.call(
@@ -277,13 +291,13 @@ service = ZohoSign::Document::UpdateService.call(
 )
 ```
 
-#### Delete a document.
+#### Delete a document
 
 ```ruby
 service = ZohoSign::Document::DeleteService.call(id: '')
 ```
 
-#### Sign a document.
+#### Sign a document
 
 A unique signing URL will be generated, which will be valid for two minutes. If the signing page is not open by then, a new link needs to be generated and it is a one-time usable URL.
 
@@ -306,12 +320,7 @@ TODO: ...
 
 ### Templates
 
-#### List templates.
-
-Note that the `offset` starts at `1` for the first item.
-
-If you don't provide a `limit`, multiple API requests will be made untill all records have been returned. You could be
-rate limited, so use wisely.
+#### List templates
 
 ```ruby
 service = ZohoSign::Template::ListService.call(offset: 1, limit: 10).each do |facade|
@@ -331,9 +340,9 @@ Filter by column.
 ZohoSign::Template::ListService.call(search_columns: { template_name: 'Eric Template' }).map { _1 }
 ```
 
-Columns to sort and filter by are `template_name`, `owner_first_name`, `modified_time`.
+Columns to sort and filter by are `template_name`, `owner_first_name` and `modified_time`.
 
-#### Get a template.
+#### Get a template
 
 ```ruby
 service = ZohoSign::Template::GetService.call(id: '')
@@ -348,19 +357,19 @@ service.template_name
 ...
 ```
 
-#### Create a template.
+#### Create a template
 
 TODO: ...
 
-#### Update a template.
+#### Update a template
 
 TODO: ...
 
-#### Delete a template.
+#### Delete a template
 
 TODO: ...
 
-#### Create document from template.
+#### Create document from template
 
 The auto filled fields specified in the `field_data` object should be marked as **Prefill by you** when creating the document template.
 

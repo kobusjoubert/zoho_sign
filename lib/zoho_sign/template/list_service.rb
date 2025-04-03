@@ -4,11 +4,10 @@ class ZohoSign::Template::ListService < ZohoSign::BaseService
   SORT_COLUMNS = %w[template_name owner_first_name modified_time].freeze
   SORT_ORDERS  = %w[ASC DESC].freeze
 
-  include Enumerable
+  include ZohoSign::Enumerable
 
-  attr_reader :limit, :offset, :sort_column, :sort_order, :search_columns
+  attr_reader :sort_column, :sort_order, :search_columns
 
-  validates :limit, presence: true, numericality: { greater_than_or_equal_to: 1 }
   validates :sort_order, inclusion: { in: SORT_ORDERS, message: "Sort order must be one of #{SORT_ORDERS.join(', ')}" }
 
   validates :sort_column, inclusion: {
@@ -24,14 +23,6 @@ class ZohoSign::Template::ListService < ZohoSign::BaseService
     throw :abort
   end
 
-  def initialize(limit: Float::INFINITY, offset: 1, sort_column: 'template_name', sort_order: 'DESC', search_columns: {})
-    @limit          = limit
-    @offset         = offset
-    @sort_column    = sort_column
-    @sort_order     = sort_order
-    @search_columns = search_columns
-  end
-
   # List documents.
   #
   # ==== Examples
@@ -39,43 +30,34 @@ class ZohoSign::Template::ListService < ZohoSign::BaseService
   #   service = ZohoSign::Template::ListService.call.first
   #   service.request_name
   #
+  # If you don't provide the `limit` argument, multiple API requests will be made untill all records have been returned.
+  # You could be rate limited, so use wisely.
+  #
   #   ZohoSign::Template::ListService.call(offset: 11, limit: 10).each { _1 }
-  #   ZohoSign::Template::ListService.call(sort_column: 'template_name', sort_order: 'ASC').each { _1 }
-  #   ZohoSign::Template::ListService.call(search_columns: { template_name: 'Eric Template' }).each { _1 }
+  #
+  # Sort by column.
+  #
+  #   ZohoSign::Template::ListService.call(sort_column: 'template_name', sort_order: 'ASC').map { _1 }
+  #
+  # Filter by column.
+  #
+  #   ZohoSign::Template::ListService.call(search_columns: { template_name: 'Eric Template' }).map { _1 }
+  #
+  # Columns to sort and filter by are `template_name`, `owner_first_name` and `modified_time`.
   #
   # GET /api/v1/templates
-  def call
-    self
-  end
+  def initialize(limit: Float::INFINITY, offset: 1, sort_column: 'template_name', sort_order: 'DESC', search_columns: {})
+    @sort_column    = sort_column
+    @sort_order     = sort_order
+    @search_columns = search_columns
 
-  def each
-    return to_enum(:each) unless block_given?
-    return if invalid?
-
-    total = 0
-
-    catch :list_end do
-      loop do
-        @response = connection.get('templates', data: params.to_json)
-        validate(:response)
-
-        unless success?
-          raise exception_for(response, errors) if bang?
-
-          throw :list_end
-        end
-
-        response.body['templates'].each do |hash|
-          yield ZohoSign::Template::Facade.new(hash)
-          total += 1
-          throw :list_end if total >= limit
-        end
-
-        break unless response.body.dig('page_context', 'has_more_rows')
-
-        @_params[:page_context][:start_index] += max_limit_per_request
-      end
-    end
+    super(
+      path:         'templates',
+      list_key:     'templates',
+      facade_klass: ZohoSign::Template::Facade,
+      limit:        limit,
+      offset:       offset
+    )
   end
 
   private
@@ -90,9 +72,5 @@ class ZohoSign::Template::ListService < ZohoSign::BaseService
         sort_order:     sort_order
       }
     }
-  end
-
-  def max_limit_per_request
-    @_max_limit_per_request ||= limit.infinite? ? 100 : [limit, 100].min
   end
 end

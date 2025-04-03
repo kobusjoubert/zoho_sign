@@ -9,7 +9,7 @@ class ZohoSign::Template::GetService < ZohoSign::BaseService
 
   validates :id, presence: true
 
-  def initialize(id: nil)
+  def initialize(id:)
     @id = id
   end
 
