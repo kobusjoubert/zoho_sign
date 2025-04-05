@@ -15,7 +15,15 @@ class ZohoSign::BaseService < ActiveCall::Base
   config_accessor :log_bodies, default: false, instance_writer: false
   config_accessor :client_id, :client_secret, :refresh_token, instance_writer: false
 
-  attr_reader :facade
+  attr_reader :access_token, :facade
+
+  before_call :set_access_token
+
+  validate on: :request do
+    next if is_a?(ZohoSign::AccessToken::GetService)
+
+    errors.merge!(access_token_service.errors) if access_token.nil? && !access_token_service.success?
+  end
 
   class << self
     def exception_mapping
@@ -32,6 +40,7 @@ class ZohoSign::BaseService < ActiveCall::Base
         proxy_authentication_required: ZohoSign::ProxyAuthenticationRequiredError,
         request_timeout:               ZohoSign::RequestTimeoutError,
         conflict:                      ZohoSign::ConflictError,
+        gone:                          ZohoSign::GoneError,
         unprocessable_entity:          ZohoSign::UnprocessableEntityError,
         too_many_requests:             ZohoSign::TooManyRequestsError,
         internal_server_error:         ZohoSign::InternalServerError,
@@ -48,7 +57,7 @@ class ZohoSign::BaseService < ActiveCall::Base
   def connection
     @_connection ||= Faraday.new do |conn|
       conn.url_prefix = base_url
-      conn.request :authorization, 'Zoho-oauthtoken', -> { access_token }
+      conn.request :authorization, 'Zoho-oauthtoken', access_token
       conn.request :multipart
       conn.request :url_encoded
       conn.request :retry
@@ -69,12 +78,18 @@ class ZohoSign::BaseService < ActiveCall::Base
     }
   end
 
-  def access_token
-    access_token = ENV['ZOHO_SIGN_ACCESS_TOKEN'].presence || cache.read(CACHE_KEY[:access_token])
-    return access_token if access_token.present?
+  def set_access_token
+    @access_token = ENV['ZOHO_SIGN_ACCESS_TOKEN'].presence || cache.read(CACHE_KEY[:access_token])
+    return if @access_token.present?
+    return unless access_token_service.success?
 
-    service = ZohoSign::AccessToken::GetService.call
-    cache.fetch(CACHE_KEY[:access_token], expires_in: [service.expires_in - 10, 0].max) { service.facade.access_token }
+    @access_token = cache.fetch(CACHE_KEY[:access_token], expires_in: [access_token_service.expires_in - 10, 0].max) do
+      access_token_service.facade.access_token
+    end
+  end
+
+  def access_token_service
+    @_access_token_service ||= ZohoSign::AccessToken::GetService.call
   end
 
   def forbidden?

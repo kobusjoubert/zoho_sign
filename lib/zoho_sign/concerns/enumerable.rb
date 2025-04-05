@@ -6,13 +6,13 @@ module ZohoSign::Enumerable
   included do
     include Enumerable
 
-    attr_reader :path, :list_key, :facade_klass, :limit, :offset
+    attr_reader :path, :list_key, :facade_klass, :offset, :limit
 
     validates :path, :list_key, :facade_klass, presence: true
     validates :limit, presence: true, numericality: { greater_than_or_equal_to: 1 }
   end
 
-  def initialize(path:, list_key:, facade_klass:, limit: Float::INFINITY, offset: 1)
+  def initialize(path:, list_key:, facade_klass:, offset: 1, limit: Float::INFINITY)
     @path         = path
     @list_key     = list_key
     @facade_klass = facade_klass
@@ -40,6 +40,8 @@ module ZohoSign::Enumerable
 
           throw :list_end
         end
+
+        throw :list_end unless response.body
 
         response.body[list_key].each do |hash|
           yield facade_klass.new(hash)

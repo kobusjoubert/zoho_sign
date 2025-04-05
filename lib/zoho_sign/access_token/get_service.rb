@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ZohoSign::AccessToken::GetService < ZohoSign::BaseService
+  skip_callback :call, :before, :set_access_token
+
   after_call :set_facade
 
   delegate_missing_to :@facade
@@ -38,7 +40,6 @@ class ZohoSign::AccessToken::GetService < ZohoSign::BaseService
       client_id:     client_id,
       client_secret: client_secret,
       refresh_token: refresh_token,
-      redirect_uri:  'https://sign.zoho.com',
       grant_type:    'refresh_token'
     }
   end
