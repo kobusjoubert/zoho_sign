@@ -46,7 +46,7 @@ class ZohoSign::Template::ListService < ZohoSign::BaseService
   # Columns to sort and filter by are `template_name`, `owner_first_name` and `modified_time`.
   #
   # GET /api/v1/templates
-  def initialize(limit: Float::INFINITY, offset: 1, sort_column: 'template_name', sort_order: 'DESC', search_columns: {})
+  def initialize(offset: 1, limit: Float::INFINITY, sort_column: 'template_name', sort_order: 'DESC', search_columns: {})
     @sort_column    = sort_column
     @sort_order     = sort_order
     @search_columns = search_columns

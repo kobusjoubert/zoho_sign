@@ -38,6 +38,9 @@ module ZohoSign
   # 409
   class ConflictError < ClientError; end
 
+  # 410
+  class GoneError < ClientError; end
+
   # 422
   class UnprocessableEntityError < ClientError; end
 

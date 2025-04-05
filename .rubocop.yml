@@ -45,7 +45,7 @@ Metrics/MethodLength:
 
 Metrics/PerceivedComplexity:
   Exclude:
-    - lib/zoho_sign/document/list_service.rb
+    - lib/zoho_sign/concerns/enumerable.rb
 
 Naming/FileName:
   Exclude:

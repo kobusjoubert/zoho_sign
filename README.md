@@ -11,9 +11,7 @@ Zoho Sign exposes the [Zoho Sign API](https://www.zoho.com/sign/api) endpoints t
   - [Using call!](#using-call!)
   - [When to use call or call!](#using-call-or-call!)
   - [Using lists](#using-lists)
-  - [Documents](#documents)
-  - [Folders](#folders)
-  - [Templates](#templates)
+- [Service Objects](#service-objects)
 - [Development](#development)
 - [Contributing](#contributing)
 - [License](#license)
@@ -33,6 +31,12 @@ gem install active_call-zoho_sign
 ```
 
 ## Configuration
+
+Create a new **Self Client** client type from the [Zoho Developer Console](https://api-console.zoho.com) to retrieve your **Client ID** and **Client Secret**.
+
+Choose what you need from the list of [Zoho Scopes](https://www.zoho.com/sign/api/oauth.html) like `ZohoSign.documents.ALL` to generate your **Grant Token**.
+
+Get your **Refresh Token** by calling `ZohoSign::GrantToken::GetService.call(grant_token: '', client_id: '', client_secret: '').refresh_token`
 
 Configure your API credentials.
 
@@ -173,7 +177,7 @@ rescue ZohoSign::RequestError => exception
 An example of where to use `call` would be in a **controller** doing an inline synchronous request.
 
 ```ruby
-class DocumentController < ApplicationController
+class SomeController < ApplicationController
   def update
     @document = ZohoSign::Document::UpdateService.call(**params)
 
@@ -192,7 +196,7 @@ An example of where to use `call!` would be in a **job** doing an asynchronous r
 You can use the exceptions to determine which retry strategy to use and which to discard.
 
 ```ruby
-class DocumentJob < ApplicationJob
+class SomeJob < ApplicationJob
   discard_on ZohoSign::NotFoundError
 
   retry_on ZohoSign::RequestTimeoutError, wait: 5.minutes, attempts: :unlimited
@@ -209,6 +213,11 @@ end
 If you don't provide the `limit` argument, multiple API requests will be made untill all records have been returned. You could be rate limited, so use wisely.
 
 Note that the `offset` argument starts at `1` for the first item.
+
+## Service Objects
+
+<details open>
+<summary>Documents</summary>
 
 ### Documents
 
@@ -306,24 +315,44 @@ service = ZohoSign::Document::Action::EmbedToken::GetService.call(request_id: ''
 service.sign_url
 ```
 
+</details>
+
+<details>
+<summary>Folders</summary>
+
 ### Folders
 
 TODO: ...
+
+</details>
+
+<details>
+<summary>Field Types</summary>
 
 ### Field Types
 
 TODO: ...
 
+</details>
+
+<details>
+<summary>Request Types</summary>
+
 ### Request Types
 
 TODO: ...
+
+</details>
+
+<details>
+<summary>Templates</summary>
 
 ### Templates
 
 #### List templates
 
 ```ruby
-service = ZohoSign::Template::ListService.call(offset: 1, limit: 10).each do |facade|
+ZohoSign::Template::ListService.call(offset: 1, limit: 10).each do |facade|
   facade.description
 end
 ```
@@ -405,6 +434,8 @@ service = ZohoSign::Template::Document::CreateService.call!(
   }
 )
 ```
+
+</details>
 
 ## Development
 

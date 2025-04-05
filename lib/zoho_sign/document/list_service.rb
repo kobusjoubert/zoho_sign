@@ -47,7 +47,7 @@ class ZohoSign::Document::ListService < ZohoSign::BaseService
   # and `created_time`.
   #
   # GET /api/v1/requests
-  def initialize(limit: Float::INFINITY, offset: 1, sort_column: 'created_time', sort_order: 'DESC', search_columns: {})
+  def initialize(offset: 1, limit: Float::INFINITY, sort_column: 'created_time', sort_order: 'DESC', search_columns: {})
     @sort_column    = sort_column
     @sort_order     = sort_order
     @search_columns = search_columns
