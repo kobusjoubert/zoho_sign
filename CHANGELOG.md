@@ -1,3 +1,10 @@
+## [0.1.5] - 2025-04-05
+
+- Added `ZohoSign::GrantToken::GetService`.
+- Set access token in `before_call` hook instead of lambda so we can capture errors from the access token service objects.
+- Fixed empty list enumerable errors.
+- Remove spec dependencies already included in `active_call-api`.
+
 ## [0.1.5] - 2025-04-03
 
 - Refactor list endpoints to use `ZohoSign::Enumerable`.
