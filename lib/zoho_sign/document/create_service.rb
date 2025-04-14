@@ -18,6 +18,8 @@ class ZohoSign::Document::CreateService < ZohoSign::BaseService
 
   # Create a document.
   #
+  # https://www.zoho.com/sign/api/document-managment/create-document.html
+  #
   # ==== Examples
   #
   #   service = ZohoSign::Document::CreateService.call(

@@ -25,6 +25,8 @@ class ZohoSign::Template::ListService < ZohoSign::BaseService
 
   # List documents.
   #
+  # https://www.zoho.com/sign/api/template-managment/get-template-list.html
+  #
   # ==== Examples
   #
   #   service = ZohoSign::Template::ListService.call.first

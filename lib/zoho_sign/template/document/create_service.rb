@@ -18,6 +18,8 @@ class ZohoSign::Template::Document::CreateService < ZohoSign::BaseService
 
   # Create a document from a template.
   #
+  # https://www.zoho.com/sign/api/template-managment/send-documents-using-template.html
+  #
   # ==== Examples
   #
   #   service = ZohoSign::Template::Document::CreateService.call!(

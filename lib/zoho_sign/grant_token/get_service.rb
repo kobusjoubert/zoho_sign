@@ -18,6 +18,8 @@ class ZohoSign::GrantToken::GetService < ZohoSign::BaseService
 
   # Get refresh token from grant token.
   #
+  # https://www.zoho.com/accounts/protocol/oauth/web-apps/access-token.html
+  #
   # ==== Examples
   #
   #   service = ZohoSign::GrantToken::GetService.call(grant_token: '', client_id: '', client_secret: '')

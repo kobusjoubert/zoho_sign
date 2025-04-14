@@ -15,6 +15,8 @@ class ZohoSign::Document::GetService < ZohoSign::BaseService
 
   # Get a document.
   #
+  # https://www.zoho.com/sign/api/document-managment/get-details-of-a-particular-document.html
+  #
   # ==== Examples
   #
   #   service = ZohoSign::Document::GetService.call(id: '')

@@ -11,6 +11,8 @@ class ZohoSign::Document::DeleteService < ZohoSign::BaseService
 
   # Delete a document.
   #
+  # https://www.zoho.com/sign/api/document-managment/delete-document.html
+  #
   # ==== Examples
   #
   #   service = ZohoSign::Document::DeleteService.call(id: '')

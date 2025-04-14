@@ -15,6 +15,8 @@ class ZohoSign::Template::GetService < ZohoSign::BaseService
 
   # Get a document.
   #
+  # https://www.zoho.com/sign/api/template-managment/get-template-details.html
+  #
   # ==== Examples
   #
   #   service = ZohoSign::Template::GetService.call(id: '')

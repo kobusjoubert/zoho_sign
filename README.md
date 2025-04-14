@@ -224,7 +224,9 @@ Note that the `offset` argument starts at `1` for the first item.
 #### List documents
 
 ```ruby
-service = ZohoSign::Document::ListService.call(offset: 1, limit: 10).each do |facade|
+# https://www.zoho.com/sign/api/document-managment/get-document-list.html
+
+ZohoSign::Document::ListService.call(offset: 1, limit: 10).each do |facade|
   facade.description
 end
 ```
@@ -246,6 +248,8 @@ Columns to sort and filter by are `request_name`, `folder_name`, `owner_full_nam
 #### Get a document
 
 ```ruby
+# https://www.zoho.com/sign/api/document-managment/get-details-of-a-particular-document.html
+
 service = ZohoSign::Document::GetService.call(id: '')
 service.request_name
 service.request_id
@@ -261,7 +265,9 @@ service.sign_percentage
 #### Create a document
 
 ```ruby
-service = ZohoSign::Document::CreateService.call(
+# https://www.zoho.com/sign/api/document-managment/create-document.html
+
+ZohoSign::Document::CreateService.call(
   file: '/path/to/file.pdf', # or File.open('/path/to/file.pdf')
   file_name: 'file.pdf',
   file_content_type: 'application/pdf',
@@ -284,7 +290,9 @@ service = ZohoSign::Document::CreateService.call(
 #### Update a document
 
 ```ruby
-service = ZohoSign::Document::UpdateService.call(
+# https://www.zoho.com/sign/api/document-managment/update-document.html
+
+ZohoSign::Document::UpdateService.call(
   id: '',
   data: {
     requests: {
@@ -303,7 +311,9 @@ service = ZohoSign::Document::UpdateService.call(
 #### Delete a document
 
 ```ruby
-service = ZohoSign::Document::DeleteService.call(id: '')
+# https://www.zoho.com/sign/api/document-managment/delete-document.html
+
+ZohoSign::Document::DeleteService.call(id: '')
 ```
 
 #### Sign a document
@@ -311,6 +321,8 @@ service = ZohoSign::Document::DeleteService.call(id: '')
 A unique signing URL will be generated, which will be valid for two minutes. If the signing page is not open by then, a new link needs to be generated and it is a one-time usable URL.
 
 ```ruby
+# https://www.zoho.com/sign/api/embedded-signing.html
+
 service = ZohoSign::Document::Action::EmbedToken::GetService.call(request_id: '', action_id: '', host: '')
 service.sign_url
 ```
@@ -352,6 +364,8 @@ TODO: ...
 #### List templates
 
 ```ruby
+# https://www.zoho.com/sign/api/template-managment/get-template-list.html
+
 ZohoSign::Template::ListService.call(offset: 1, limit: 10).each do |facade|
   facade.description
 end
@@ -374,6 +388,8 @@ Columns to sort and filter by are `template_name`, `owner_first_name` and `modif
 #### Get a template
 
 ```ruby
+# https://www.zoho.com/sign/api/template-managment/get-template-details.html
+
 service = ZohoSign::Template::GetService.call(id: '')
 service.description
 service.document_fields
@@ -383,6 +399,7 @@ service.folder_name
 service.folder_id
 service.owner_email
 service.template_name
+service.request_status
 ...
 ```
 
@@ -403,7 +420,9 @@ TODO: ...
 The auto filled fields specified in the `field_data` object should be marked as **Prefill by you** when creating the document template.
 
 ```ruby
-service = ZohoSign::Template::Document::CreateService.call!(
+# https://www.zoho.com/sign/api/template-managment/send-documents-using-template.html
+
+ZohoSign::Template::Document::CreateService.call!(
   id: '',
   is_quicksend: true,
   data: {

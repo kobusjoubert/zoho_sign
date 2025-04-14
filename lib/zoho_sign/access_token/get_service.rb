@@ -9,6 +9,8 @@ class ZohoSign::AccessToken::GetService < ZohoSign::BaseService
 
   # Get access token.
   #
+  # https://www.zoho.com/accounts/protocol/oauth/web-apps/access-token-expiry.html
+  #
   # ==== Examples
   #
   #   service = ZohoSign::AccessToken::GetService.call
