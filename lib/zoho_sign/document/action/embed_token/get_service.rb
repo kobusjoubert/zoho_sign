@@ -39,7 +39,7 @@ class ZohoSign::Document::Action::EmbedToken::GetService < ZohoSign::BaseService
   #
   # POST /api/v1/requests/:request_id/actions/:action_id/embedtoken
   def call
-    connection.post("/api/v1/requests/#{request_id}/actions/#{action_id}/embedtoken", **params)
+    connection.post("requests/#{request_id}/actions/#{action_id}/embedtoken", **params)
   end
 
   private
