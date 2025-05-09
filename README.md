@@ -2,7 +2,15 @@
 
 [![Gem Version](https://badge.fury.io/rb/active_call-zoho_sign.svg?icon=si%3Arubygems)](https://badge.fury.io/rb/active_call-zoho_sign)
 
-Zoho Sign exposes the [Zoho Sign API](https://www.zoho.com/sign/api) endpoints through service objects.
+Zoho Sign exposes the [Zoho Sign API](https://www.zoho.com/sign/api) endpoints through [Active Call](https://rubygems.org/gems/active_call) service objects.
+
+<div align="center">
+  <a href="https://platform45.com?utm_source=github&utm_content=zoho_sign">
+    <picture>
+      <img src="https://github.com/user-attachments/assets/19fd40df-2ce9-4f30-8120-d53f3fbf9f07">
+    </picture>
+  </a>
+</div>
 
 - [Installation](#installation)
 - [Configuration](#configuration)
