@@ -1,4 +1,10 @@
-## [0.1.5] - 2025-04-05
+## [0.1.7] - 2025-05-09
+
+- README updates with links to API endpoint docs.
+- `EmbedToken::GetService` path does not need to set the full path `/api/v1/requests/...` -> `requests/...`.
+- README and Gemspec description updates.
+
+## [0.1.6] - 2025-04-05
 
 - Added `ZohoSign::GrantToken::GetService`.
 - Set access token in `before_call` hook instead of lambda so we can capture errors from the access token service objects.
